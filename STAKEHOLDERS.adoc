@@ -1,0 +1,72 @@
+= Physical rehabilitation tool. App for treating patients after accidents with the help of a controller : Inquiries from interested parties
+Volovyk Roman; Volovyk Ruslan
+Version 1.0, September 21, 2020
+:toc: macro
+:toc-title: Content
+:sectnums:
+:chapter-label:
+
+<<<
+
+[preface]
+== List of changes
+[cols=4*,options="header"]
+|===
+|Data
+|Version
+|Description
+|Authors
+
+|21.09.2020
+|1.0
+|Creating a document
+|Volovyk Roman; Volovyk Ruslan
+|===
+
+<<<
+
+toc::[]
+
+<<<
+
+== Introduction
+This document describes stakeholder tools for a web application for helping people. Stakeholders are future users of the application and its administration team.
+
+=== Goal
+The purpose of the document is to define the basic requirements for the function that performs the application, as well as the rules and restrictions relating to the application.
+
+=== Context
+The list of requirements described in this document is the basis for the terms of reference for the development of a web application for rehabilitation.
+
+== Brief overview of the product
+Physical rehabilitation tool will be a tool for treating patients after accidents with the help of a controller that allows you to perform exercises by playing games.
+
+== Characteristics of business processes
+
+=== Purpose of the system
+The Physical rehabilitation tool web application is designed to give users the ability to recover from different accidents.
+
+=== Interaction with users
+Interaction with users will take place through a web application and the need to use e-mail over a telephone connection.
+
+=== Characteristics of the business process
+The system will be managed through a separate section of the web application and through a special administration team consisting of administrators and system operators.
+
+== Main functionality.
+Working screens for: clinic, specialist, patient and administrator Saving real-time data about the location of the controller in space during the exercise of the patient. The fallen output of the results in the form of a graph. The doctor prescribes international tests for the patient, according to the results.
+
+== Accessibility.
+=== Localization.
+The web application interface must be localized in English, French, Chinese, Russian, Ukrainian.
+ 
+=== Software platforms.
+The web application must display correctly in all web browsers of the latest versions.
+
+=== Interface.
+The interface of the web application must be adapted to work with people with various disabilities.
+
+== Fault tolerance.
+The system must have a high level of fault tolerance. It will be provided with data backup, duplication of databases, servers, etc.
+
+== Security.
+System user data must be securely protected from outsiders by encrypting and organizing authenticated access.
