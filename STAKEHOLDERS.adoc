@@ -53,7 +53,31 @@ Interaction with users will take place through a web application and the need to
 The system will be managed through a separate section of the web application and through a special administration team consisting of administrators and system operators.
 
 == Main functionality.
-Working screens for: clinic, specialist, patient and administrator Saving real-time data about the location of the controller in space during the exercise of the patient. The fallen output of the results in the form of a graph. The doctor prescribes international tests for the patient, according to the results.
+Working screens for: clinic, specialist, patient and administrator
+
+=== Exercise assignment function
+Saving real-time data about the location of the controller in space during the exercise of the patient. The fallen output of the results in the form of a graph.
+
+=== Doctor's function
+The doctor prescribes international tests for the patient, according to the results.
+
+=== Patient's function
+With the help of the controller performs exercises to restore health.
+
+=== Hostipal's function
+Keeps doctors and does everything possible for their normal work e.g. hires doctors, fires, pays all expenses.
+
+=== Exercise evaluation function.
+Registered patients may rate the quality of the controller positively or negatively. The total rating of the video is shown in its description.
+
+=== Functions of work with application.
+A registered user who has an account can perform all the actions defined by his role.
+
+=== Administrator's function
+Register hospital, manage them, has full access.
+
+=== Moderation function.
+System operators are notified of each new case and have the opportunity to make decisions if necessary, if it violates the rules of use of the application.
 
 == Accessibility.
 === Localization.
