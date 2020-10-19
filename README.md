@@ -6,3 +6,7 @@ Working screens for: clinic, specialist, patient and administrator
 Saving real-time data about the location of the controller in space during the exercise of the patient.
 The fallen output of the results in the form of a graph.
 The doctor prescribes international tests for the patient, according to the results.
+
+## Contributors
+* [Volovik Roman](https://github.com/romanV7)  
+* [Volovik Ruslan](https://github.com/RV8V)  
