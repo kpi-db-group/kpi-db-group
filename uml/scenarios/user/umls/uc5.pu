@@ -1,0 +1,94 @@
+@startuml userRegistration
+
+left header
+<font color=000 size=18><b>Package:</b> Guest
+
+<font color=000 size=16><b>ID:</b> UC-5
+<font color=000 size=16><b>Name:</b> New user registration.
+<font color=000 size=16><b>Participants:</b> User, System.
+<font color=000 size=16><b>Prerequisites:</b> This user has not been registered before.
+<font color=000 size=16><b>Result:</b> User account created.
+<font color=000 size=16><b>Exceptions:</b>
+<font color=000 size=16> EX_00: A user with such data already exists
+<font color=000 size=16> EX_01: There is no such mail
+<font color=000 size=16> EX_02: Passwords do not match
+<font color=000 size=16> EX_03: Not all fields were filled
+<font color=000 size=16> EX_04: Account creation was not
+<font color=000 size=16>               confirmed during the day
+<font color=000 size=16> EX_05: There is no access to the database
+
+<font color=000 size=16><b>The main scenario:</b>
+
+end header
+
+|User|
+start
+: The user clicks the "Register" button;
+|Система|
+: The system receives the user ID and sends the registration form;
+
+|User|
+
+: Fills out the form with the new user's personal data.
+(Mail, password, password confirmation, name);
+
+|System|
+
+: Checks data for uniqueness.;
+note right #aaffaa
+
+<font color=red><b> Можливо EX_00.
+
+end note
+
+: Checks fields for occupancy. Checks password fields
+and "password confirmation" to match. ;
+
+note right #aaffaa
+
+<font color=red><b> Maybe EX_02.
+<font color=red><b> Maybe EX_03.
+
+end note
+
+: Generates a link to confirm
+account creation
+Sends a letter to the specified mail.;
+note right #aaffaa
+
+<font color=red><b> Maybe EX_01.
+
+end note
+
+|User|
+
+: Follow the link and confirm the creation
+account. ;
+
+note left #aaffaa
+
+<font color=red><b> Maybe EX_04.
+
+end note
+
+
+|System|
+
+: Makes the appropriate entries in the database ;
+note right #aaffaa
+
+<font color=red><b> Maybe EX_05.
+
+end note
+|User|
+stop;
+
+right footer
+
+
+System dynamics. Model of precedents.
+NTUU KPI named after I. Sikorsky
+Kyiv-2020
+end footer
+
+@enduml

@@ -1,0 +1,68 @@
+@startuml userTariffs
+left header
+<font color=000 size=18><b>Package:</b> User
+
+<font color=000 size=16><b>ID:</b> UC-3
+<font color=000 size=16><b>Name:</b> Changing the tariff plan by the user.
+<font color=000 size=16><b>Participants:</b> User, System.
+<font color=000 size=16><b>Prerequisites:</b> The user must be authorized in the system.
+<font color=000 size=16><b>Result:</b> The user gets access to the features and functionality according to the tariff he has chosen.
+<font color=000 size=16><b>Exceptions:</b>
+<font color=000 size=16> EX_00: The system has not received confirmation of successful payment
+<font color=000 size=16> EX_01: Payment was not made within the allotted period
+
+<font color=000 size=16><b>The main scenario:</b>
+
+end header
+
+|User|
+start
+: User goes to "Tariffs" section;
+
+|System|
+:    The system provides a form with information about all available
+      tariff plans that allow to expand opportunities
+    his account (under empowerment
+    means connecting the hospital mode, and
+    also an additional opportunity to connect also the specialist mode);
+
+|User|
+
+: The user selects the required tariff and clicks on it;
+
+|System|
+
+: The system processes the connection request and sends it
+         user details for payment;
+
+|User|
+
+: The user pays at the selected rate;
+
+
+|System|
+
+: The system receives confirmation of successful payment;
+note right #aaffaa
+
+<font color=red><b> Maybe EX_00.
+<font color=red><b> Maybe EX_01.
+
+end note
+
+: The system gives the user access to the capabilities of his tariff plan;
+
+|User|
+: The user gets the opportunity to enjoy the benefits of the selected tariff plan;
+
+stop;
+
+right footer
+
+
+System dynamics. Model of precedents.
+NTUU KPI named after I. Sikorsky
+Kyiv-2020
+end footer
+
+@enduml

@@ -1,0 +1,67 @@
+ @startuml Analysis Tools
+left header
+<font color=000 size=18><b>Package:</b> Patient
+
+<font color=000 size=16><b>ID:</b> UC-2
+<font color=000 size=16><b>Name:</b> Using tools.
+<font color=000 size=16><b>Paticipants:</b> Patient, System.
+<font color=000 size=16><b>Prerequisites:</b> Availability of data.
+<font color=000 size=16><b>Result:</b> The obtained data will be used in the subsequent stages of the patient's work.
+<font color=000 size=16><b>Exeptions:</b>
+<font color=000 size=16> EX_00: Database access failure
+<font color=000 size=16> EX_01: Errors when extracting data from the database
+
+<font color=000 size=16><b>The main scenario:</b>
+
+end header
+
+|Patient|
+start
+: The patient goes into view mode;
+
+: Selects the presentation of the results he needs;
+
+|System|
+: The system allows you to sort, choose the order
+   (regularize) the display of data in the "Categories" tab
+   in ascending / descending order, or set the order yourself;
+
+note right #aaffaa
+<font color=red><b> Maybe EX_00.
+end note
+
+
+: Ability to combine or delete answer points,
+   putting ticks in front of certain variants of them;
+
+: Changing chart colors (in appropriate forms);
+
+: You can depict the zoom;
+
+|Patient|
+: Patient by clicking the "Copy" button, or
+   downloads the finished file immediately ("Download" button);
+
+|System|
+: Ability for JSON format to copy data to
+   clipboard by clicking the "Copy" button
+   or download the finished file immediately button
+   ("Download");
+
+note right #aaffaa
+<font color=red><b> Maybe EX_01.
+end note
+
+
+|Patient|
+stop;
+
+right footer
+
+
+System dynamics. Model of precedents.
+NTUU KPI named after I. Sikorsky
+Kyiv-2020
+end footer
+
+@enduml

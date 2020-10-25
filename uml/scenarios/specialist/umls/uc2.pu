@@ -1,0 +1,77 @@
+@startuml interviewerPollEditing
+left header
+<font color=000 size=18><b>Package:</b> Specialist
+
+<font color=000 size=16><b>ID:</b> UC-2
+<font color=000 size=16><b>Name:</b> Edit exercises.
+<font color=000 size=16><b>Paticipants:</b> Specialist, System.
+<font color=000 size=16><b>Prerequisuites:</b> The user must be authorized in the system, as well as have access to exercises created by him earlier.
+<font color=000 size=16><b>Result:</b> The user is successfully editing an exercise they created earlier.
+<font color=000 size=16><b>Exeptions:</b>
+<font color=000 size=16> EX_00: No access to database.
+
+<font color=000 size=16><b>The main scenario:</b>
+
+end header
+
+|Specialist|
+start
+: User goes to the "My patients exercises" section;
+|Система|
+: The system gives the user access to the database
+exercises created by him earlier.;
+
+|Specialist|
+
+: The user selects the exercise he needs. ;
+
+|System|
+
+: The system gives the user access to
+relevant exercise.;
+
+note right #aaffaa
+<font color=red><b> Maybe EX_00.
+end note
+
+|Specialist|
+
+: The user clicks the "Edit" button. ;
+
+|System|
+
+: The system opens the corresponding exercise
+in the exercise designer. ;
+
+|Specialist|
+
+: The user edits the selected exercise
+according to their needs. ;
+
+: The user clicks the "Save Changes" button. ;
+
+|System|
+
+: The system saves changes and updates
+information on the relevant exercise. ;
+
+: The system notifies the user successfully
+update the exercise of his choice. ;
+
+|Specialist|
+
+: The user receives a successful message
+update the exercise of his choice. ;
+
+
+stop;
+
+right footer
+
+
+System dynamics. Model of precedents.
+NTUU KPI named after I. Sikorsky
+Kyiv-2020
+end footer
+
+@enduml

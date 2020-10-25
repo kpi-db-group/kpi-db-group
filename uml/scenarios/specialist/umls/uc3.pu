@@ -1,0 +1,81 @@
+@startuml interviewerProfileExpect
+left header
+<font color=000 size=18><b>Package:</b> Specialist
+
+<font color=000 size=16><b>ID:</b> UC-3
+<font color=000 size=16><b>Name:</b> View information about patients
+<font color=000 size=16><b>Paticipants:</b> Specialist, System.
+<font color=000 size=16><b>Prerequisites:</b> The user must be authorized in the system. 
+<font color=000 size=16>The exercise that will search for information about patient should be non-anonymous.
+<font color=000 size=16><b>Result:</b> The specialist finds information about the patients exercises he needs.
+<font color=000 size=16><b>Exercise:</b>
+<font color=000 size=16> EX_00: The database is not available.
+
+<font color=000 size=16><b>The main scenario:</b>
+
+end header
+
+|Specialist|
+start
+: The user goes to the "My patients exercises" section.;
+|System|
+: The system gives the user access to
+databases of exercises created by specialist earlier.;
+
+note right #aaffaa
+<font color=red><b> Maybe EX_00.
+end note
+
+|Specialist|
+
+: The user selects the necessary
+him a poll. ;
+
+|System|
+
+: The system gives the user access
+to the relevant survey.;
+
+|Specialist|
+
+: The user clicks the "Information" button. ;
+
+|System|
+
+: The system gives the user access to
+information related to this exercises. ;
+
+|Specialist|
+
+: The user clicks on the "Respondents" button ;
+
+|System|
+
+: The system gives the user access to the list
+all patients who were examined. ;
+
+|Specialist|
+
+: The user selects the patient he needs. ;
+
+|System|
+
+: The system gives the user access to
+profile data of the corresponding user.;
+
+|Specialist|
+
+: The user sees the profile information of the patient selected by him.;
+
+
+stop;
+
+right footer
+
+
+System dynamics. Model of precedents.
+NTUU KPI named after I. Sikorsky
+Kyiv-2020
+end footer
+
+@enduml

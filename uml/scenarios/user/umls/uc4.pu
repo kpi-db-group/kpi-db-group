@@ -1,0 +1,80 @@
+@startuml userTechSupport
+left header
+<font color=000 size=18><b>Package:</b> User
+
+<font color=000 size=16><b>ID:</b> UC-4
+<font color=000 size=16><b>Name:</b> Communication with technical support.
+<font color=000 size=16><b>Participants:</b> User, System.
+<font color=000 size=16><b>Prerequisites:</b> The user must be authorized in the system.
+<font color=000 size=16><b>Result:</b> The user receives an answer to the question.
+
+<font color=000 size=16><b>The main scenario:</b>
+
+end header
+
+|User|
+start
+: The user goes to the "Technical Support" section;
+
+|System|
+: The system gives the user access to a form where everyone is represented
+frequently asked questions. (The list of these questions is replenished by managers);
+
+: In the same form, the "Ask another question" button is available;
+
+|User|
+: The user finds the answer in the FAQ list. If
+    there is no necessary information, he clicks
+            "Ask another question" button;
+           
+|System|
+: The system determines the status of the user and depending on
+       purchased tariff, gives the user a form;
+      
+note right #aaffaa
+  1) If the user has a regular account, then him
+   the form is given, filling in which he sends
+   questions to email technical support and
+   waits until a reply arrives in his mail
+   (it takes some time); 
+
+  2) If the user has access to modes
+   Patient, Specialist or Hospital, then
+   the user connects to the chat where he will have
+   be able to get answers to your questions, or
+   get help from one of the employees
+   technical support;  
+end note    
+
+|User|
+: The user and the employee communicate as long as
+until the issue is resolved;
+      
+|System|
+: When the problem is exhausted and the conversation is closed, the system
+          provides a form for the employee;
+note right #aaffaa
+
+The employee fills out the form as needed,
+where it indicates the problem and its solution
+
+end note
+
+: The system replenishes the database of answers to questions and solutions to problems;
+
+
+|User|
+
+: The user received an answer to his question, the problem is solved;
+
+stop;
+
+right footer
+
+
+System dynamics. Model of precedents.
+NTUU KPI named after I. Sikorsky
+Kyiv-2020
+end footer
+
+@enduml

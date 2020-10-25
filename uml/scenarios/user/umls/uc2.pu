@@ -1,0 +1,90 @@
+@startuml userPolls
+left header
+<font color=000 size=18><b>Package:</b> User
+
+<font color=000 size=16><b>ID:</b> UC-2
+<font color=000 size=16><b>Name:</b> Search and fill in the survey by the user.
+<font color=000 size=16><b>Participants:</b> User, System.
+<font color=000 size=16><b>Prerequisites:</b> The user must be authorized in the system.
+<font color=000 size=16><b>Result:</b> The user is interviewed and, if necessary, receives a copy of the survey by mail.
+<font color=000 size=16><b>Exceptions:</b>
+<font color=000 size=16> EX_00: There is no access to the database
+<font color=000 size=16> EX_01: Data entered incorrectly
+
+<font color=000 size=16><b>The main scenario:</b>
+
+end header
+
+|User|
+start
+: The user goes to the polls section.
+(Or go to the required poll by link);
+
+|System|
+: The system gives the user access to those available to him
+  surveys, as well as the ability to search in this list
+         specific poll by title;
+note right #aaffaa
+
+<font color=red><b> Maybe EX_00.
+
+end note    
+
+|User|
+
+: The user enters data to search;
+
+: The user clicks the "Search" button;
+
+|System|
+
+: The system searches and provides the user with a list
+relevant surveys from the list provided to him in the form of a list;
+
+|User|
+
+: The user finds and selects the poll he needs;
+
+|System|
+
+: The system provides the user with access to this survey;
+
+: The system provides an appropriate form to fill;
+
+|User|
+
+: The user fills out the appropriate form and clicks the "Confirm" button;
+
+|System|
+: The system checks the entered data for correctness;
+note right #aaffaa
+
+<font color=red><b> Maybe EX_01.
+
+end note   
+
+: The system stores the received data in the database. The system sends
+       a copy of the survey to the user;
+note right #aaffaa
+
+<font color=red><b> Maybe EX_00.
+
+end note         
+      
+: The system notifies the user of a successful pass
+     survey and redirects to the main page;
+    
+|User|
+: The user successfully passes the survey and receives a copy by mail;
+
+stop;
+
+right footer
+
+
+System dynamics. Model of precedents.
+NTUU KPI named after I. Sikorsky
+Kyiv-2020
+end footer
+
+@enduml
