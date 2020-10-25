@@ -1,0 +1,87 @@
+@startuml ModelView
+right header
+<font size=24 color=black>Package: <b>UCD_1.1
+end header
+
+title
+<font size=18 color=black>Rehabilitation tool
+<font size=16 color=black>Diagram of precedents
+end title
+
+actor "User" as User
+actor "Patient" as Patient
+actor "Specialist" as Specialist
+actor "Hospital" as Hospital
+actor "Admin" as Admin
+
+' UCes for User:
+usecase "<b>UC_1</b>\nData editing" as UC1_User
+usecase "<b>UC_2</b>\nSearch and complete the survey" as UC2_User
+usecase "<b>UC_3</b>\nChange of tariff plan" as UC3_User
+usecase "<b>UC_4</b>\nCommunication with technical support" as UC4_User
+usecase "<b>UC_5</b>\nRegistration" as UC5_User
+
+' UCes for Patient:
+usecase "<b>UC_1</b>\nView results" as UC1_Patient
+usecase "<b>UC_2</b>\nUsing tools" as UC2_Patient
+usecase "<b>UC_3</b>\nPerforms exercises" as UC3_Patient
+
+' UCes for Specialist:
+usecase "<b>UC_1</b>\nAssign exercises" as UC1_Specialist
+usecase "<b>UC_2</b>\nEdit exercises" as UC2_Specialist
+usecase "<b>UC_3</b>\nView patient results" as UC3_Specialist
+usecase "<b>UC_4</b>\nPrescribes international tests for the patient, according to the results" as UC4_Specialist
+
+' UCes for Hospital:
+usecase "<b>UC_1</b>\nInvite specialists" as UC1_Hospital
+usecase "<b>UC_2</b>\nFire specialists" as UC2_Hospital
+usecase "<b>UC_3</b>\nPay all expenses" as UC3_Hospital
+usecase "<b>UC_4</b>\nKeeps doctors and does everything possible for their normal work" as UC4_Hospital
+
+' UCes for Admin:
+usecase "<b>UC_1</b>\nOrganization of technical support services with further maintenance of this system by the customer" as UC1_Admin
+usecase "<b>UC_2</b>\nAbility to "play a role" (act, access opportunities) for both the patient, specialist and the hospital" as UC2_Admin
+usecase "<b>UC_3</b>\nManipulation of user access rights" as UC4_Admin
+
+' Actors connections
+Patient -u-|> User
+Specialist -u-|> User
+Hospital -u-|> User
+
+Admin -u--|> User
+Admin -u--|> Patient
+Admin -u--|> Specialist
+Admin -u--|> Hospital
+
+' UCes connectios
+
+User -u-> UC1_User
+User -u-> UC2_User
+User -d--> UC3_User
+User -d--> UC4_User
+User -d--> UC5_User
+
+Patient -r-> UC1_Patient
+Patient -d-> UC2_Patient
+Patient -d-> UC3_Patient
+
+Specialist -u-> UC1_Specialist
+Specialist -u-> UC2_Specialist
+Specialist -d--> UC3_Specialist
+Specialist -d--> UC4_Specialist
+
+Hospital -u-> UC1_Hospital
+Hospital -u-> UC2_Hospital
+Hospital -d--> UC3_Hospital
+Hospital -d--> UC4_Hospital
+
+Admin -d--> UC1_Admin
+Admin -d-> UC2_Admin
+Admin -d-> UC3_Admin
+
+right footer
+Rehabilitation tool. Model of precedents.
+NTUU KPI im. I. Sikorsky
+Kyiv-2020
+end footer
+@enduml
