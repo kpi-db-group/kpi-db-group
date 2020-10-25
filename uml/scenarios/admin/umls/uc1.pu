@@ -1,0 +1,64 @@
+ @startuml Support Services
+left header
+<font color=000 size=18><b>Package:</b> Admin
+
+<font color=000 size=16><b>ID:</b> UC-1
+<font color=000 size=16><b>Name:</b> Organization of services of those. support.
+<font color=000 size=16><b>Participants:</b> Administrator, System.
+<font color=000 size=16><b>Prerequisites:</b> The administrator is in touch with technical support.
+<font color=000 size=16><b>Result:</b> The administrator provides technical support to the team and certain access rights to the technical support service.
+<font color=000 size=16><b>Exceptional situations:</b>
+<font color=000 size=16> EX_00: Sending failure
+
+<font color=000 size=16><b>The main scenario:</b>
+
+end header
+
+|User|
+start
+: The administrator goes to the page
+   by the link "Technical support";
+
+|System|
+: The system provides the required page;
+
+|User|
+: In the "Orders" field, the administrator writes
+  necessary actions and plan of work with the system;
+
+: In the "Grant access" list, select the following access rights;
+
+note left #aaffaa
+  - viewing questionnaires; 
+  - editing questionnaires;  
+  - questionnaire testing; 
+  - view results and forecast;
+end note
+
+|System|
+: The system fills in the fields;
+
+|User|
+: The administrator clicks the "Submit Request" button
+  and awaits confirmation;
+
+|System|
+: The system responds to the request and confirms the operation
+  ("Accepted" next to the send button);
+
+note right #aaffaa
+<font color=red><b> Maybe EX_00.
+end note
+
+|User|
+stop;
+
+right footer
+
+
+System dynamics. Model of precedents.
+NTUU KPI named after I. Sikorsky
+Kyiv-2020
+end footer
+
+@enduml
