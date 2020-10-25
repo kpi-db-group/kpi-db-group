@@ -1,0 +1,58 @@
+ @startuml Reports Forming
+left header
+<font color=000 size=18><b>Package:</b> Hospital
+
+<font color=000 size=16><b>ID:</b> UC-1
+<font color=000 size=16><b>Name:</b> Invite specialists.
+<font color=000 size=16><b>Paticipants:</b> Hospital, System.
+<font color=000 size=16><b>Prerequisites:</b> Hospital have access to specialists profiles, can view them.
+<font color=000 size=16><b>Result:</b> Invite specialists.
+
+<font color=000 size=16><b>The main scenario:</b>
+
+end header
+
+|Hospital|
+start
+: Hospital writes a "Invite specialist" button;
+
+|System|
+: The system opens the tab where they are selected
+       they included in the description;
+
+|Hospital|
+: The hospital chooses the appropriate specialist
+   (in the corresponding lists - menus);
+
+|System|
+: The system responds to input parameters;
+
+|Hospital|
+: After selecting the required specialist and parameters
+patient clicks Next (move on);
+
+|System|
+: Based on the data, the system calls him;
+
+|Hospital|
+: Provides the generated document in which
+formed title page and paragraphs
+       info (their presentation);
+
+|System|
+: The document can be saved (in .docx, .pdf, ... formats);
+
+|Hospital|
+: The hospital invites specialist;
+
+stop;
+
+right footer
+
+
+System dynamics. Model of precedents.
+NTUU KPI named after I. Sikorsky
+Kyiv-2020
+end footer
+
+@enduml

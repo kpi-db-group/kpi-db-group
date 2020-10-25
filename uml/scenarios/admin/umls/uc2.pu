@@ -1,0 +1,83 @@
+@startuml Roles Simulation
+left header
+<font color=000 size=18><b>Package:</b> Admin
+
+<font color=000 size=16><b>ID:</b> UC-2
+<font color=000 size=16><b>Name:</b> Ability to "play a role" for both the patient, specialist and the hospital.
+<font color=000 size=16><b>Participants:</b> Admin, System.
+<font color=000 size=16><b>Prerequisites:</b> The administrator must check the questionnaire, which has passed the stage of creation and is ready to be sent to the hospital.
+<font color=000 size=16><b>Result:</b> Assessment of the status of the questionnaire, identification of shortcomings, debugging at different stages of the questionnaire.
+
+<font color=000 size=16><b>Основний сценарій:</b>
+
+end header
+
+|User|
+start
+: The administrator selects the required questionnaire;
+
+|System|
+: The system provides the selected questionnaire among the available questionnaires;
+
+|User|
+: The administrator selects the view mode
+     questionnaires (patient, specialist or hospital);
+
+|System|
+: The system opens the selected simulation mode;
+
+: When selecting the hospital mode, the questionnaire editor comes off;
+
+|User|
+: After editing, the administrator
+  has the opportunity to go to the tab "Placing the questionnaire;
+
+note left #aaffaa
+  The presentation of this survey is indicated
+     respondents (link, document).
+end note
+
+
+|System|
+: The system will provide a choice of views;
+
+|User|
+: After posting the administrator
+   can view survey results
+   (specialist mode);
+
+|System|
+: The system will go to the "Survey results" page;
+
+: Response viewing and forecasting functions are provided;
+
+|User|
+: The administrator also has the option
+   switch to specialist mode;
+
+|System|
+: The system opens the selected simulation mode;
+
+|User|
+: In the specialist mode, the administrator can
+   take a survey of this questionnaire;
+
+|System|
+: The system will open the "pass the poll" page;
+
+|User|
+: After analyzing the survey, the administrator has the opportunity
+   notify those. support and hospital about collected
+           the results of the survey;
+
+stop;
+
+right footer
+
+
+System dynamics. Model of precedents.
+NTUU KPI named after I. Sikorsky
+Kyiv-2020
+end footer
+
+@enduml
