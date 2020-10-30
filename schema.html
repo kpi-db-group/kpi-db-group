@@ -1,0 +1,1767 @@
+<!doctype html>
+<head>
+	<title>Mongo Schema</title>
+
+	<style>
+		svg {
+			background-color: white;
+			font-family: "Helvetic Neue", Helvetica, Arial, sans-serif;
+			font-size: small;
+		}
+
+		.node rect,
+		.node circle,
+		.node ellipse {
+		  stroke: #333;
+		  opacity: 0.8;
+		  fill: #fff;
+		  fill-opacity: 0.6;
+		}
+		.edgePath path {
+		  stroke: #333;
+		  fill: #333;
+		  fill-opacity: 1;
+		  stroke-opacity: 1;
+		}
+		.cluster {
+		  stroke: #999;
+		  fill: #888;
+		  fill-opacity: 0.3;
+		  stroke-opacity: 0.6;
+		}
+		.entity-name rect {
+		  fill: #08f;
+		  fill-opacity: 0.3;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="background"></div>
+	<div class="container">
+		<svg></svg>
+	</div>
+	<canvas width="1024" height="1024" style="display:none"></canvas>
+
+
+	<script src="https://d3js.org/d3.v3.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/dagre-d3/0.4.17/dagre-d3.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+
+	<script>
+		var drawERM = function(data) {
+			var width = window.innerWidth, 
+			initialHeight = window.innerHeight, 
+			svg = d3.select("body div.container svg"),
+			inner = svg.append("g");
+
+			svg.attr('width', width).attr('height', initialHeight);
+
+			var resizeGraph = function(doCenter) {
+				var newWidth = window.innerWidth; 
+				var newHeight = window.innerHeight;
+
+				if(newWidth < g.graph().width + 40) {
+					newWidth = g.graph().width + 40;
+				}
+				if(newHeight < g.graph().height + 40) {
+					newHeight = g.graph().height + 40;
+				}
+				svg.attr('width', newWidth).attr('height', newHeight);
+
+				// Center the graph
+				if(doCenter) {
+					zoom
+					  .translate([(svg.attr("width") - g.graph().width * initialScale) / 2, 20])
+					  .scale(initialScale)
+					  .event(svg);
+				}
+			}
+
+			// Set up zoom support
+			var zoom = d3.behavior.zoom().on("zoom", function() {
+			  inner.attr("transform", "translate(" + d3.event.translate + ")" +
+			    "scale(" + d3.event.scale + ")");
+			});
+			svg.call(zoom);
+
+			// create graph
+			var g = new dagreD3.graphlib.Graph({
+			  multigraph: false,
+			  compound: true
+			}).setGraph({
+			  rankdir: "LR",
+			  edgesep: 25,
+			  nodesep: 0
+			});
+
+			var links = [];
+
+			var addField = function(collectionName, fieldName, fieldInfo, parentFieldName) {
+				var nodeName = parentFieldName ? collectionName + "_" + parentFieldName + "_" + fieldName : collectionName + "_" + fieldName;
+				g.setNode(nodeName, {
+				  label: (parentFieldName ? parentFieldName + "." + fieldName : fieldName) + ": " + fieldInfo.type,
+				  width: 300
+				});
+				g.setParent(nodeName, "___" + collectionName + "_container");
+
+				if(fieldInfo.foreignKey && fieldInfo.references) {
+					links.push({
+						from: nodeName,
+						to: fieldInfo.references + "__id"
+					});			
+				}
+
+				if(fieldInfo.type == "Object" && fieldInfo.structure) {
+					for(var subFieldName in fieldInfo.structure) {
+						addField(collectionName, subFieldName, fieldInfo.structure[subFieldName], parentFieldName ? parentFieldName + "." + fieldName : fieldName);
+					}
+				}
+			};
+
+			var addCollection = function(collectionName, collectionInfo) {
+				g.setNode("___" + collectionName + "_container", {
+				  label: ""
+				});
+				g.setNode("___" + collectionName + "_title", {
+				  label: collectionName,
+				  class: 'entity-name',
+				  labelStyle: 'font-weight:bold;',
+				  width: 300
+				});
+
+				g.setParent("___" + collectionName + "_title", "___" + collectionName + "_container");
+
+				for(var fieldName in collectionInfo) {
+					addField(collectionName, fieldName, collectionInfo[fieldName]);
+				}
+			};
+
+			for(var collectionName in data) {
+				addCollection(collectionName, data[collectionName]);
+			}
+
+			links.map(function(link) {
+				g.setEdge(link.from, link.to, {
+				  label: '',
+				  lineInterpolate: 'monotone'
+				});
+			});
+
+			// Create the renderer
+			var render = dagreD3.render();
+
+			// Run the renderer. This is what draws the final graph.
+			render(inner, g);
+
+			// adjust height
+			var initialScale = 1; //0.75;
+
+			window.addEventListener('resize', function () {
+				resizeGraph();
+			});
+
+			resizeGraph(true);
+
+		};
+
+		var data = {
+	"recommendedgamenews": {
+		"_id": {
+			"primaryKey": true,
+			"type": "Object",
+			"required": true
+		},
+		"name": {
+			"type": "string",
+			"required": true
+		},
+		"description": {
+			"type": "string",
+			"required": true
+		},
+		"__v": {
+			"type": "number",
+			"required": true
+		}
+	},
+	"tests": {
+		"_id": {
+			"primaryKey": true,
+			"type": "Object",
+			"required": true
+		},
+		"name": {
+			"key": true,
+			"type": "string",
+			"required": true
+		},
+		"lang": {
+			"type": "string",
+			"required": true
+		},
+		"type": {
+			"key": true,
+			"type": "string",
+			"required": true
+		},
+		"formula": {
+			"type": "string",
+			"required": true
+		},
+		"results": {
+			"type": "Array",
+			"required": true
+		},
+		"testMeasurements": {
+			"type": "Array",
+			"required": true
+		},
+		"testQuestions": {
+			"type": "Array",
+			"required": true
+		},
+		"__v": {
+			"type": "number",
+			"required": true
+		},
+		"status": {
+			"type": "string",
+			"required": true
+		},
+		"bodyPart": {
+			"type": "string",
+			"required": true
+		},
+		"measurementUnits": {
+			"type": "string",
+			"required": true
+		},
+		"measurementCompare": {
+			"type": "string",
+			"required": true
+		},
+		"subtype": {
+			"type": "string",
+			"required": true
+		},
+		"clearResults": {
+			"type": "boolean",
+			"required": true
+		},
+		"lastUpdate": {
+			"type": "Date",
+			"required": true
+		}
+	},
+	"patientexercisenews": {
+		"_id": {
+			"primaryKey": true,
+			"type": "Object",
+			"required": true
+		},
+		"exercise": {
+			"foreignKey": true,
+			"references": "exercises",
+			"key": true,
+			"type": "Object",
+			"required": true
+		},
+		"repetition": {
+			"type": "number",
+			"required": false
+		},
+		"duration": {
+			"type": "undefined",
+			"required": false
+		},
+		"patientLid": {
+			"foreignKey": true,
+			"references": "patientlids",
+			"key": true,
+			"type": "Object",
+			"required": true
+		},
+		"__v": {
+			"type": "number",
+			"required": true
+		}
+	},
+	"exercises": {
+		"_id": {
+			"primaryKey": true,
+			"type": "Object",
+			"required": true
+		},
+		"forGames": {
+			"type": "Array",
+			"required": true
+		},
+		"name": {
+			"type": "string",
+			"required": true
+		},
+		"link": {
+			"type": "string",
+			"required": true
+		},
+		"pictureLink": {
+			"type": "string",
+			"required": true
+		},
+		"lang": {
+			"type": "string",
+			"required": true
+		},
+		"classifierId": {
+			"type": "string",
+			"required": true
+		},
+		"bodyPart": {
+			"foreignKey": true,
+			"references": "bodyparts",
+			"key": true,
+			"type": "Object",
+			"required": true
+		},
+		"description": {
+			"key": true,
+			"type": "string",
+			"required": true
+		},
+		"translation": {
+			"foreignKey": true,
+			"references": "exercisetranslations",
+			"key": true,
+			"type": "Object",
+			"required": true
+		},
+		"specialist": {
+			"foreignKey": true,
+			"references": "specialists",
+			"key": true,
+			"type": "Object",
+			"required": true
+		},
+		"__v": {
+			"type": "number",
+			"required": true
+		},
+		"displayForPatient": {
+			"type": "boolean",
+			"required": true
+		},
+		"displayForSpecialist": {
+			"type": "boolean",
+			"required": true
+		}
+	},
+	"patientlids": {
+		"_id": {
+			"primaryKey": true,
+			"type": "Object",
+			"required": true
+		},
+		"active": {
+			"type": "boolean",
+			"required": true
+		},
+		"dateOfRegistration": {
+			"type": "Date",
+			"required": true
+		},
+		"email": {
+			"type": "string",
+			"required": true
+		},
+		"password": {
+			"type": "string",
+			"required": true
+		},
+		"user": {
+			"foreignKey": true,
+			"references": "users",
+			"key": true,
+			"type": "Object",
+			"required": true
+		},
+		"timeStamp": {
+			"type": "Date",
+			"required": true
+		},
+		"achievement": {
+			"foreignKey": true,
+			"references": "patientlidachievements",
+			"key": true,
+			"type": "Object",
+			"required": true
+		},
+		"__v": {
+			"type": "number",
+			"required": true
+		}
+	},
+	"patientquestiondeletegames": {
+		"_id": {
+			"primaryKey": true,
+			"type": "Object",
+			"required": true
+		},
+		"date": {
+			"type": "Date",
+			"required": true
+		},
+		"question": {
+			"type": "string",
+			"required": true
+		},
+		"patient": {
+			"foreignKey": true,
+			"references": "patients",
+			"key": true,
+			"type": "Object",
+			"required": true
+		},
+		"game": {
+			"key": true,
+			"type": "Object",
+			"required": true
+		},
+		"__v": {
+			"type": "number",
+			"required": true
+		}
+	},
+	"histories": {
+		"_id": {
+			"primaryKey": true,
+			"type": "Object",
+			"required": true
+		},
+		"action": {
+			"type": "string",
+			"required": true
+		},
+		"hospital": {
+			"type": "undefined",
+			"required": false
+		},
+		"specialist": {
+			"foreignKey": true,
+			"references": "specialists",
+			"key": true,
+			"type": "Object",
+			"required": true
+		},
+		"patient": {
+			"foreignKey": true,
+			"references": "patients",
+			"key": true,
+			"type": "Object",
+			"required": true
+		},
+		"dateOfChanges": {
+			"type": "Date",
+			"required": true
+		},
+		"result": {
+			"type": "string",
+			"required": true
+		},
+		"__v": {
+			"type": "number",
+			"required": true
+		}
+	},
+	"privacypolicies": {
+		"_id": {
+			"primaryKey": true,
+			"type": "Object",
+			"required": true
+		},
+		"lang": {
+			"type": "string",
+			"required": true
+		},
+		"checkboxtext": {
+			"type": "string",
+			"required": true
+		},
+		"buttontext": {
+			"type": "string",
+			"required": true
+		},
+		"titletext": {
+			"type": "string",
+			"required": true
+		},
+		"text": {
+			"type": "string",
+			"required": true
+		}
+	},
+	"patientdiagnoses": {
+		"_id": {
+			"primaryKey": true,
+			"type": "Object",
+			"required": true
+		},
+		"diagnosis": {
+			"key": true,
+			"type": "string",
+			"required": true
+		},
+		"lang": {
+			"type": "string",
+			"required": true
+		},
+		"__v": {
+			"type": "number",
+			"required": true
+		}
+	},
+	"patientgamenews": {
+		"_id": {
+			"primaryKey": true,
+			"type": "Object",
+			"required": true
+		},
+		"lastSession": {
+			"type": "Date",
+			"required": true
+		},
+		"patientLid": {
+			"key": true,
+			"type": "Object",
+			"required": true
+		},
+		"recomendedGameNew": {
+			"foreignKey": true,
+			"references": "recommendedgamenews",
+			"key": true,
+			"type": "Object",
+			"required": true
+		},
+		"__v": {
+			"type": "number",
+			"required": true
+		}
+	},
+	"bodyparts": {
+		"_id": {
+			"primaryKey": true,
+			"type": "Object",
+			"required": true
+		},
+		"name": {
+			"type": "string",
+			"required": true
+		},
+		"__v": {
+			"type": "number",
+			"required": true
+		},
+		"bodyPartId": {
+			"type": "string",
+			"required": true
+		}
+	},
+	"recommendedgames": {
+		"_id": {
+			"primaryKey": true,
+			"type": "Object",
+			"required": true
+		},
+		"name": {
+			"key": true,
+			"type": "string",
+			"required": true
+		},
+		"path": {
+			"type": "string",
+			"required": true
+		},
+		"__v": {
+			"type": "number",
+			"required": true
+		}
+	},
+	"cities": {
+		"_id": {
+			"primaryKey": true,
+			"type": "Object",
+			"required": true
+		},
+		"name": {
+			"key": true,
+			"type": "string",
+			"required": true
+		},
+		"country": {
+			"foreignKey": true,
+			"references": "countries",
+			"key": true,
+			"type": "Object",
+			"required": true
+		},
+		"__v": {
+			"type": "number",
+			"required": true
+		}
+	},
+	"faqstatistics": {
+		"_id": {
+			"primaryKey": true,
+			"type": "Object",
+			"required": true
+		},
+		"views": {
+			"type": "number",
+			"required": true
+		},
+		"positive": {
+			"type": "number",
+			"required": true
+		},
+		"negative": {
+			"type": "number",
+			"required": true
+		},
+		"comments": {
+			"type": "Array",
+			"required": true
+		},
+		"__v": {
+			"type": "number",
+			"required": true
+		}
+	},
+	"tymeoftrainings": {
+		"_id": {
+			"primaryKey": true,
+			"type": "Object",
+			"required": true
+		},
+		"date": {
+			"type": "Date",
+			"required": true
+		},
+		"time": {
+			"type": "number",
+			"required": true
+		},
+		"__v": {
+			"type": "number",
+			"required": true
+		}
+	},
+	"patientexercises": {
+		"_id": {
+			"primaryKey": true,
+			"type": "Object",
+			"required": true
+		},
+		"totalTime": {
+			"type": "number",
+			"required": true
+		},
+		"dateFrom": {
+			"type": "undefined",
+			"required": false
+		},
+		"dateTo": {
+			"type": "undefined",
+			"required": false
+		},
+		"comment": {
+			"type": "string",
+			"required": true
+		},
+		"patient": {
+			"foreignKey": true,
+			"references": "users",
+			"key": true,
+			"type": "Object",
+			"required": true
+		},
+		"exercise": {
+			"key": true,
+			"type": "Object",
+			"required": true
+		},
+		"specialist": {
+			"key": true,
+			"type": "Object",
+			"required": true
+		},
+		"settings": {
+			"foreignKey": true,
+			"references": "patientsettings",
+			"key": true,
+			"type": "Object",
+			"required": true
+		},
+		"__v": {
+			"type": "number",
+			"required": true
+		}
+	},
+	"cards": {
+		"_id": {
+			"primaryKey": true,
+			"type": "Object",
+			"required": true
+		},
+		"last4": {
+			"type": "number",
+			"required": true
+		},
+		"exp_year": {
+			"type": "number",
+			"required": true
+		},
+		"exp_month": {
+			"type": "string",
+			"required": true
+		},
+		"country": {
+			"type": "string",
+			"required": true
+		},
+		"brand": {
+			"type": "string",
+			"required": true
+		},
+		"__v": {
+			"type": "number",
+			"required": true
+		}
+	},
+	"achievements": {
+		"_id": {
+			"primaryKey": true,
+			"type": "Object",
+			"required": true
+		},
+		"gameNames": {
+			"type": "Array",
+			"required": true
+		},
+		"totalAmountOfTimeInGame": {
+			"type": "number",
+			"required": true
+		},
+		"answersCount": {
+			"type": "number",
+			"required": true
+		},
+		"patient": {
+			"foreignKey": true,
+			"references": "patients",
+			"key": true,
+			"type": "Object",
+			"required": true
+		},
+		"startDate": {
+			"type": "Date",
+			"required": true
+		},
+		"endDate": {
+			"type": "Date",
+			"required": true
+		},
+		"__v": {
+			"type": "number",
+			"required": true
+		}
+	},
+	"patientsettings": {
+		"_id": {
+			"primaryKey": true,
+			"type": "Object",
+			"required": true
+		},
+		"patientPosition": {
+			"type": "string",
+			"required": true
+		},
+		"path": {
+			"type": "string",
+			"required": true
+		},
+		"__v": {
+			"type": "number",
+			"required": true
+		}
+	},
+	"patientquestionfeelings": {
+		"_id": {
+			"primaryKey": true,
+			"type": "Object",
+			"required": true
+		},
+		"date": {
+			"type": "Date",
+			"required": true
+		},
+		"questionBefore": {
+			"type": "string",
+			"required": true
+		},
+		"questionAfter": {
+			"type": "string",
+			"required": true
+		},
+		"patient": {
+			"key": true,
+			"type": "Object",
+			"required": true
+		},
+		"game": {
+			"key": true,
+			"type": "Object",
+			"required": true
+		},
+		"__v": {
+			"type": "number",
+			"required": true
+		}
+	},
+	"users": {
+		"_id": {
+			"primaryKey": true,
+			"type": "Object",
+			"required": true
+		},
+		"password": {
+			"type": "string",
+			"required": true
+		},
+		"email": {
+			"key": true,
+			"type": "string",
+			"required": true
+		},
+		"role": {
+			"type": "string",
+			"required": true
+		},
+		"roles": {
+			"type": "Array",
+			"required": true
+		},
+		"__v": {
+			"type": "number",
+			"required": true
+		},
+		"wrongLoginAttemptsCycle": {
+			"type": "Array",
+			"required": true
+		},
+		"restoringToken": {
+			"type": "string",
+			"required": false
+		},
+		"restoringTokenCreateDate": {
+			"type": "Date",
+			"required": false
+		},
+		"token": {
+			"type": "string",
+			"required": false
+		},
+		"lang": {
+			"type": "string",
+			"required": true
+		},
+		"identifier": {
+			"type": "string",
+			"required": true
+		},
+		"mark": {
+			"type": "string",
+			"required": true
+		},
+		"markCreateDate": {
+			"type": "Date",
+			"required": true
+		},
+		"updatedAt": {
+			"type": "Date",
+			"required": true
+		},
+		"firstLoginDate": {
+			"type": "Date",
+			"required": true
+		},
+		"lastLoginDate": {
+			"type": "Date",
+			"required": true
+		},
+		"dateOfDeactivation": {
+			"type": "Date",
+			"required": false
+		},
+		"enabled": {
+			"type": "boolean",
+			"required": true
+		},
+		"limitedAccess": {
+			"type": "boolean",
+			"required": true
+		},
+		"emailToken": {
+			"type": "string",
+			"required": true
+		},
+		"unsubscribeEmail": {
+			"type": "boolean",
+			"required": true
+		},
+		"createdAt": {
+			"type": "Date",
+			"required": true
+		}
+	},
+	"faqconfigs": {
+		"_id": {
+			"primaryKey": true,
+			"type": "Object",
+			"required": true
+		},
+		"lang": {
+			"type": "string",
+			"required": true
+		},
+		"role": {
+			"type": "string",
+			"required": true
+		},
+		"__v": {
+			"type": "number",
+			"required": true
+		},
+		"faqItem": {
+			"type": "Array",
+			"required": true
+		}
+	},
+	"hospitalbankaccounts": {
+		"_id": {
+			"primaryKey": true,
+			"type": "Object",
+			"required": true
+		},
+		"companyName": {
+			"type": "string",
+			"required": true
+		}
+	},
+	"exercisetranslations": {
+		"_id": {
+			"primaryKey": true,
+			"type": "Object",
+			"required": true
+		},
+		"translations": {
+			"type": "Array",
+			"required": true
+		},
+		"__v": {
+			"type": "number",
+			"required": true
+		}
+	},
+	"hospitals": {
+		"_id": {
+			"primaryKey": true,
+			"type": "Object",
+			"required": true
+		},
+		"name": {
+			"key": true,
+			"type": "string",
+			"required": false
+		},
+		"city": {
+			"key": true,
+			"type": "string",
+			"required": true
+		},
+		"mainEmail": {
+			"key": true,
+			"type": "string",
+			"required": false
+		},
+		"additionalEmail": {
+			"key": true,
+			"type": "string",
+			"required": false
+		},
+		"hospitalStatus": {
+			"type": "string",
+			"required": true
+		},
+		"country": {
+			"foreignKey": true,
+			"references": "countries",
+			"key": true,
+			"type": "Object",
+			"required": true
+		},
+		"user": {
+			"foreignKey": true,
+			"references": "users",
+			"key": true,
+			"type": "Object",
+			"required": true
+		},
+		"newsAndUpdates": {
+			"type": "boolean",
+			"required": true
+		},
+		"__v": {
+			"type": "number",
+			"required": true
+		},
+		"card": {
+			"key": true,
+			"type": "string",
+			"required": false
+		},
+		"stripeCustomerId": {
+			"type": "string",
+			"required": false
+		},
+		"stripeSubscriptionId": {
+			"type": "string",
+			"required": false
+		}
+	},
+	"games": {
+		"_id": {
+			"primaryKey": true,
+			"type": "Object",
+			"required": true
+		},
+		"name": {
+			"key": true,
+			"type": "string",
+			"required": true
+		},
+		"setting": {
+			"foreignKey": true,
+			"references": "settings",
+			"key": true,
+			"type": "Object",
+			"required": true
+		},
+		"link": {
+			"type": "string",
+			"required": true
+		},
+		"path": {
+			"type": "string",
+			"required": true
+		},
+		"patient": {
+			"foreignKey": true,
+			"references": "patients",
+			"key": true,
+			"type": "Object",
+			"required": true
+		},
+		"__v": {
+			"type": "number",
+			"required": true
+		}
+	},
+	"specialiststatuses": {
+		"_id": {
+			"primaryKey": true,
+			"type": "Object",
+			"required": true
+		},
+		"status": {
+			"type": "string",
+			"required": true
+		},
+		"lang": {
+			"type": "string",
+			"required": true
+		},
+		"__v": {
+			"type": "number",
+			"required": true
+		}
+	},
+	"specialists": {
+		"_id": {
+			"primaryKey": true,
+			"type": "Object",
+			"required": true
+		},
+		"patients": {
+			"type": "Array",
+			"required": false
+		},
+		"firstName": {
+			"type": "string",
+			"required": false
+		},
+		"lastName": {
+			"type": "string",
+			"required": false
+		},
+		"dateOfHiring": {
+			"type": "Date",
+			"required": true
+		},
+		"email": {
+			"type": "string",
+			"required": false
+		},
+		"specialistSpecialization": {
+			"foreignKey": true,
+			"references": "specialistspecializations",
+			"key": true,
+			"type": "Object",
+			"required": true
+		},
+		"firstLogin": {
+			"type": "boolean",
+			"required": true
+		},
+		"specialistStatus": {
+			"type": "string",
+			"required": true
+		},
+		"hospital": {
+			"key": true,
+			"type": "Object",
+			"required": true
+		},
+		"user": {
+			"foreignKey": true,
+			"references": "users",
+			"key": true,
+			"type": "Object",
+			"required": true
+		},
+		"__v": {
+			"type": "number",
+			"required": true
+		},
+		"dateOfFiring": {
+			"type": "Date",
+			"required": true
+		},
+		"dateOfBirth": {
+			"type": "Date",
+			"required": true
+		},
+		"gender": {
+			"type": "string",
+			"required": true
+		},
+		"phoneNumber": {
+			"type": "string",
+			"required": true
+		},
+		"experience": {
+			"type": "undefined",
+			"required": false
+		}
+	},
+	"patienttestresults": {
+		"_id": {
+			"primaryKey": true,
+			"type": "Object",
+			"required": true
+		},
+		"patient": {
+			"key": true,
+			"type": "Object",
+			"required": true
+		},
+		"referenceResults": {
+			"type": "Array",
+			"required": true
+		},
+		"patientResults": {
+			"type": "Array",
+			"required": true
+		},
+		"test": {
+			"foreignKey": true,
+			"references": "tests",
+			"key": true,
+			"type": "Object",
+			"required": true
+		},
+		"lang": {
+			"type": "string",
+			"required": true
+		},
+		"result": {
+			"type": "string",
+			"required": true
+		},
+		"description": {
+			"type": "string",
+			"required": true
+		},
+		"date": {
+			"type": "Date",
+			"required": true
+		},
+		"__v": {
+			"type": "number",
+			"required": true
+		}
+	},
+	"patientlidachievements": {
+		"_id": {
+			"primaryKey": true,
+			"type": "Object",
+			"required": true
+		},
+		"trainingNames": {
+			"type": "Array",
+			"required": true
+		},
+		"timeOfTrainings": {
+			"type": "Array",
+			"required": true
+		},
+		"repeatsOfTrainings": {
+			"type": "Array",
+			"required": true
+		},
+		"__v": {
+			"type": "number",
+			"required": true
+		},
+		"answersCount": {
+			"type": "number",
+			"required": true
+		}
+	},
+	"icfqualifiers": {
+		"_id": {
+			"primaryKey": true,
+			"type": "Object",
+			"required": true
+		},
+		"name": {
+			"type": "string",
+			"required": true
+		},
+		"description": {
+			"type": "string",
+			"required": true
+		},
+		"__v": {
+			"type": "number",
+			"required": true
+		},
+		"value": {
+			"type": "string",
+			"required": true
+		}
+	},
+	"repeatsoftrainings": {
+		"_id": {
+			"primaryKey": true,
+			"type": "Object",
+			"required": true
+		},
+		"date": {
+			"type": "Date",
+			"required": true
+		},
+		"repeats": {
+			"type": "number",
+			"required": true
+		},
+		"__v": {
+			"type": "number",
+			"required": true
+		}
+	},
+	"icflinks": {
+		"_id": {
+			"primaryKey": true,
+			"type": "Object",
+			"required": true
+		},
+		"name": {
+			"type": "string",
+			"required": true
+		},
+		"code": {
+			"type": "string",
+			"required": true
+		},
+		"description": {
+			"type": "string",
+			"required": true
+		},
+		"type": {
+			"type": "string",
+			"required": true
+		},
+		"__v": {
+			"type": "number",
+			"required": true
+		}
+	},
+	"phoneplacements": {
+		"_id": {
+			"primaryKey": true,
+			"type": "Object",
+			"required": true
+		},
+		"url": {
+			"type": "Array",
+			"required": true
+		},
+		"name": {
+			"type": "string",
+			"required": true
+		},
+		"__v": {
+			"type": "number",
+			"required": true
+		}
+	},
+	"emails": {
+		"_id": {
+			"primaryKey": true,
+			"type": "Object",
+			"required": true
+		},
+		"ignoreUnsubscribe": {
+			"type": "boolean",
+			"required": true
+		},
+		"lang": {
+			"type": "string",
+			"required": true
+		},
+		"subject": {
+			"type": "string",
+			"required": true
+		},
+		"text": {
+			"type": "string",
+			"required": true
+		},
+		"serviceName": {
+			"key": true,
+			"type": "string",
+			"required": true
+		},
+		"__v": {
+			"type": "number",
+			"required": true
+		},
+		"roles": {
+			"type": "Array",
+			"required": true
+		},
+		"onlyActiveUsers": {
+			"type": "boolean",
+			"required": true
+		},
+		"date": {
+			"type": "Date",
+			"required": true
+		}
+	},
+	"faqitems": {
+		"_id": {
+			"primaryKey": true,
+			"type": "Object",
+			"required": true
+		},
+		"roles": {
+			"type": "Array",
+			"required": true
+		},
+		"question": {
+			"key": true,
+			"type": "string",
+			"required": true
+		},
+		"answer": {
+			"key": true,
+			"type": "string",
+			"required": false
+		},
+		"lang": {
+			"type": "string",
+			"required": false
+		},
+		"faqStatistic": {
+			"foreignKey": true,
+			"references": "faqstatistics",
+			"key": true,
+			"type": "Object",
+			"required": true
+		},
+		"__v": {
+			"type": "number",
+			"required": true
+		},
+		"keyWords": {
+			"key": true,
+			"type": "undefined",
+			"required": false
+		}
+	},
+	"specialistspecializations": {
+		"_id": {
+			"primaryKey": true,
+			"type": "Object",
+			"required": true
+		},
+		"specialization": {
+			"key": true,
+			"type": "string",
+			"required": true
+		},
+		"lang": {
+			"type": "string",
+			"required": true
+		},
+		"__v": {
+			"type": "number",
+			"required": true
+		}
+	},
+	"patientstatuses": {
+		"_id": {
+			"primaryKey": true,
+			"type": "Object",
+			"required": true
+		},
+		"status": {
+			"key": true,
+			"type": "string",
+			"required": true
+		},
+		"lang": {
+			"type": "string",
+			"required": true
+		},
+		"__v": {
+			"type": "number",
+			"required": true
+		}
+	},
+	"countries": {
+		"_id": {
+			"primaryKey": true,
+			"type": "Object",
+			"required": true
+		},
+		"name": {
+			"type": "string",
+			"required": true
+		},
+		"code": {
+			"type": "string",
+			"required": true
+		},
+		"__v": {
+			"type": "number",
+			"required": true
+		}
+	},
+	"patients": {
+		"_id": {
+			"primaryKey": true,
+			"type": "Object",
+			"required": true
+		},
+		"specialists": {
+			"type": "Array",
+			"required": false
+		},
+		"firstLogin": {
+			"type": "boolean",
+			"required": false
+		},
+		"firstName": {
+			"type": "string",
+			"required": false
+		},
+		"lastName": {
+			"type": "string",
+			"required": false
+		},
+		"dateOfBirth": {
+			"type": "Date",
+			"required": false
+		},
+		"gender": {
+			"type": "string",
+			"required": true
+		},
+		"dateOfRegistration": {
+			"type": "Date",
+			"required": false
+		},
+		"dateOfWritingOut": {
+			"type": "Date",
+			"required": true
+		},
+		"hospital": {
+			"foreignKey": true,
+			"references": "hospitals",
+			"key": true,
+			"type": "Object",
+			"required": true
+		},
+		"firstTimeAddGame": {
+			"type": "boolean",
+			"required": false
+		},
+		"user": {
+			"foreignKey": true,
+			"references": "users",
+			"key": true,
+			"type": "Object",
+			"required": true
+		},
+		"patientStatus": {
+			"type": "string",
+			"required": true
+		},
+		"patientDiagnosis": {
+			"foreignKey": true,
+			"references": "patientdiagnoses",
+			"key": true,
+			"type": "Object",
+			"required": true
+		},
+		"email": {
+			"key": true,
+			"type": "string",
+			"required": false
+		},
+		"__v": {
+			"type": "number",
+			"required": true
+		},
+		"height": {
+			"type": "number",
+			"required": true
+		},
+		"weight": {
+			"type": "number",
+			"required": true
+		},
+		"nickname": {
+			"key": true,
+			"type": "string",
+			"required": false
+		},
+		"achievement": {
+			"foreignKey": true,
+			"references": "achievements",
+			"key": true,
+			"type": "Object",
+			"required": true
+		},
+		"address": {
+			"type": "string",
+			"required": true
+		},
+		"phoneNumber": {
+			"type": "string",
+			"required": true
+		},
+		"goalRehabilitation": {
+			"type": "string",
+			"required": true
+		},
+		"medicalHistory": {
+			"type": "string",
+			"required": true
+		}
+	},
+	"settings": {
+		"_id": {
+			"primaryKey": true,
+			"type": "Object",
+			"required": true
+		},
+		"workType": {
+			"type": "number",
+			"required": true
+		},
+		"onRHand": {
+			"type": "boolean",
+			"required": true
+		},
+		"button1": {
+			"type": "number",
+			"required": true
+		},
+		"button2": {
+			"type": "number",
+			"required": true
+		},
+		"button3": {
+			"type": "number",
+			"required": true
+		},
+		"button4": {
+			"type": "number",
+			"required": true
+		},
+		"button5": {
+			"type": "number",
+			"required": true
+		},
+		"btnSensLeft": {
+			"type": "number",
+			"required": true
+		},
+		"btnSensRight": {
+			"type": "number",
+			"required": true
+		},
+		"btnJRight": {
+			"type": "number",
+			"required": true
+		},
+		"btnJLeft": {
+			"type": "number",
+			"required": true
+		},
+		"btnJDown": {
+			"type": "number",
+			"required": true
+		},
+		"btnJUp": {
+			"type": "number",
+			"required": true
+		},
+		"keySens": {
+			"type": "number",
+			"required": true
+		},
+		"mouseSens": {
+			"type": "number",
+			"required": true
+		},
+		"mouseSensY": {
+			"type": "number",
+			"required": true
+		},
+		"noPWM": {
+			"type": "boolean",
+			"required": true
+		},
+		"noAutoSlide": {
+			"type": "boolean",
+			"required": true
+		},
+		"up": {
+			"type": "number",
+			"required": true
+		},
+		"down": {
+			"type": "number",
+			"required": true
+		},
+		"right": {
+			"type": "number",
+			"required": true
+		},
+		"left": {
+			"type": "number",
+			"required": true
+		},
+		"global": {
+			"type": "boolean",
+			"required": true
+		},
+		"noMouse": {
+			"type": "boolean",
+			"required": true
+		},
+		"tPDelta": {
+			"type": "number",
+			"required": true
+		},
+		"brMode": {
+			"type": "boolean",
+			"required": true
+		},
+		"workMode": {
+			"type": "boolean",
+			"required": true
+		},
+		"__v": {
+			"type": "number",
+			"required": true
+		}
+	},
+	"hospitalstatuses": {
+		"_id": {
+			"primaryKey": true,
+			"type": "Object",
+			"required": true
+		},
+		"name": {
+			"type": "string",
+			"required": true
+		},
+		"lang": {
+			"type": "string",
+			"required": true
+		},
+		"__v": {
+			"type": "number",
+			"required": true
+		}
+	}
+};
+
+		drawERM(data);
+
+		$("canvas").attr("width", $("svg").width());
+		$("canvas").attr("height", $("svg").height());
+
+		var st = $(document.createElement("style"));
+		st.text("/* <![CDATA[ */" + $("style").text() + "/* ]]> */");
+		$("svg").append(st);
+		var html = d3.select("svg")
+			.attr("version", 1.1)
+			.attr("xmlns", "http://www.w3.org/2000/svg")
+			.node().parentNode.innerHTML;
+
+		var imgsrc = 'data:image/svg+xml;base64,'+ btoa(html);
+
+		var canvas = document.querySelector("canvas"),
+			context = canvas.getContext("2d");
+
+		var image = new Image;
+		image.src = imgsrc;
+		image.onload = function() {
+			context.drawImage(image, 0, 0);
+
+			var canvasdata = canvas.toDataURL("image/png");
+
+			var a = document.createElement("a");
+			a.download = "diagram.png";
+			a.href = canvasdata;
+			document.body.appendChild(a);
+			a.click();
+		};
+	</script>
+</body>
