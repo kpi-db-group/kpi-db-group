@@ -1,4 +1,4 @@
-@startuml ModelView
+@startuml
 right header
 <font size=24 color=black>Package: <b>UCD_1.1
 end header
@@ -18,7 +18,7 @@ actor "Admin" as Admin
 usecase "<b>UC_1</b>\nData editing" as UC1_User
 usecase "<b>UC_2</b>\nSearch and complete the survey" as UC2_User
 usecase "<b>UC_3</b>\nChange of tariff plan" as UC3_User
-usecase "<b>UC_4</b>\nCommunication with technical support" as UC4_User
+usecase "<b>UC_4</b>\nCommunication with\ntechnical support" as UC4_User
 usecase "<b>UC_5</b>\nRegistration" as UC5_User
 
 ' UCes for Patient:
@@ -30,16 +30,16 @@ usecase "<b>UC_3</b>\nPerforms exercises" as UC3_Patient
 usecase "<b>UC_1</b>\nAssign exercises" as UC1_Specialist
 usecase "<b>UC_2</b>\nEdit exercises" as UC2_Specialist
 usecase "<b>UC_3</b>\nView patient results" as UC3_Specialist
-usecase "<b>UC_4</b>\nPrescribes international tests for the patient, according to the results" as UC4_Specialist
+usecase "<b>UC_4</b>\nPrescribes international\ntests for the patient, according to the results" as UC4_Specialist
 
 ' UCes for Hospital:
 usecase "<b>UC_1</b>\nInvite specialists" as UC1_Hospital
 usecase "<b>UC_2</b>\nFire specialists" as UC2_Hospital
 usecase "<b>UC_3</b>\nPay all expenses" as UC3_Hospital
-usecase "<b>UC_4</b>\nKeeps doctors and does everything possible for their normal work" as UC4_Hospital
+usecase "<b>UC_4</b>\nKeeps doctors and does\neverything possible for their\nnormal work" as UC4_Hospital
 
 ' UCes for Admin:
-usecase "<b>UC_1</b>\nOrganization of technical support services with further maintenance of this system by the customer" as UC1_Admin
+usecase "<b>UC_1</b>\nOrganization of technical\nsupport services with further\nmaintenance of this system by the customer" as UC1_Admin
 usecase "<b>UC_2</b>\nManipulation of user access rights" as UC2_Admin
 
 ' Actors connections
