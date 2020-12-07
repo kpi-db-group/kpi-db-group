@@ -1,4 +1,4 @@
-CREATE TABLE public.user (
+CREATE TABLE IF NOT EXISTS public.user (
     	id uuid NOT NULL,
         email varchar(255) NOT NULL,
         role varchar(255) NULL,
@@ -21,7 +21,7 @@ CREATE TABLE public.user (
         CONSTRAINT user_pkey PRIMARY KEY (id)
 );
 
-CREATE TABLE public.recommendedgamenews (
+CREATE TABLE IF NOT EXISTS public.recommendedgamenews (
     	id uuid NOT NULL,
     	name varchar(255) NOT NULL,
     	description varchar(255) NOT NULL,
@@ -30,7 +30,7 @@ CREATE TABLE public.recommendedgamenews (
 	deleted_at timestamptz NULL,
 );
 
-CREATE TABLE public.tests (
+CREATE TABLE IF NOT EXISTS public.tests (
 	id uuid NOT NULL,
 	lang varchar(255) NOT NULL,
    	type varchar(255) NOT NULL,
@@ -51,7 +51,7 @@ CREATE TABLE public.tests (
 	CONSTRAINT tests_bodyPart_id_fkey FOREIGN KEY (bodyPart_id) REFERENCES bodyParts(id) ON UPDATE CASCADE ON DELETE CASCADE,
 );
 
-CREATE TABLE public.patientexercisenews (
+CREATE TABLE IF NOT EXISTS public.patientexercisenews (
 	id uuid NOT NULL,
 	repetition integer NOT NULL,
   	duration integer NOT NULL,
@@ -65,7 +65,7 @@ CREATE TABLE public.patientexercisenews (
     	CONSTRAINT patientexercisenews_exercise_id_fkey FOREIGN KEY (exercise_id) REFERENCES exercises(id) ON UPDATE CASCADE ON DELETE CASCADE,
 );
 
-CREATE TABLE public.exercises (
+CREATE TABLE IF NOT EXISTS public.exercises (
 	id uuid NOT NULL,
 	name varchar(255) NOT NULL,
     	link varchar(255) NOT NULL,
@@ -88,7 +88,7 @@ CREATE TABLE public.exercises (
 	CONSTRAINT exercises_specialist_id_fkey FOREIGN KEY (specialist_id) REFERENCES specialists(id) ON UPDATE CASCADE ON DELETE CASCADE,
 );
 
-CREATE TABLE public.patientlids (
+CREATE TABLE IF NOT EXISTS public.patientlids (
 	id uuid NOT NULL,
 	content jsonb NOT NULL,
 	created_at timestamptz NOT NULL,
@@ -101,7 +101,7 @@ CREATE TABLE public.patientlids (
 	CONSTRAINT patientlids_user_id_fkey FOREIGN KEY (user_id) REFERENCES user(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
-CREATE TABLE public.patientquestiondeletegames (
+CREATE TABLE IF NOT EXISTS public.patientquestiondeletegames (
 	id uuid NOT NULL,
     	question varchar(255) NOT NULL,
 	game varchar(255) NOT NULL,
@@ -113,7 +113,7 @@ CREATE TABLE public.patientquestiondeletegames (
 	CONSTRAINT patientquestiondeletegames_patient_id_fkey FOREIGN KEY (patient_id) REFERENCES patients(id) ON UPDATE CASCADE ON DELETE CASCADE,
 );
 
-CREATE TABLE public.histories (
+CREATE TABLE IF NOT EXISTS public.histories (
 	id uuid NOT NULL,
     	action varchar(255) NOT NULL,
 	result varchar(255) NOT NULL,
@@ -129,7 +129,7 @@ CREATE TABLE public.histories (
 	CONSTRAINT histories_patient_id_fkey FOREIGN KEY (patient_id) REFERENCES patients(id) ON UPDATE CASCADE ON DELETE CASCADE,
 );
 
-CREATE TABLE public.privacypolicies (
+CREATE TABLE IF NOT EXISTS public.privacypolicies (
 	id uuid NOT NULL,
 	lang varchar(255) NOT NULL,
     	checkboxtext varchar(255) NOT NULL,
@@ -138,13 +138,13 @@ CREATE TABLE public.privacypolicies (
     	text varchar(255) NOT NULL,
 );
 
-CREATE TABLE public.patientdiagnoses (
+CREATE TABLE IF NOT EXISTS public.patientdiagnoses (
 	id uuid NOT NULL,
 	diagnosis varchar(255) NOT NULL,
     	lang varchar(255) NOT NULL,
 );
 
-CREATE TABLE public.patientgamenews (
+CREATE TABLE IF NOT EXISTS public.patientgamenews (
 	id uuid NOT NULL,
     	last_session timestamptz NOT NULL,
 	created_at timestamptz NOT NULL,
@@ -157,7 +157,7 @@ CREATE TABLE public.patientgamenews (
 	CONSTRAINT patientgamenews_recomended_game_new_id_fkey FOREIGN KEY (recomended_game_new_id) REFERENCES recomendedGameNews(id) ON UPDATE CASCADE ON DELETE CASCADE,
 );
 
-CREATE TABLE public.bodyparts (
+CREATE TABLE IF NOT EXISTS public.bodyparts (
 	id uuid NOT NULL,
     	name varchar(255) NOT NULL,
 	created_at timestamptz NOT NULL,
@@ -165,7 +165,7 @@ CREATE TABLE public.bodyparts (
 	deleted_at timestamptz NULL,
 );
 
-CREATE TABLE public.recommendedgames (
+CREATE TABLE IF NOT EXISTS public.recommendedgames (
 	id uuid NOT NULL,
     	name varchar(255) NOT NULL,
     	path varchar(255) NOT NULL,
@@ -174,7 +174,7 @@ CREATE TABLE public.recommendedgames (
 	deleted_at timestamptz NULL,
 );
 
-CREATE TABLE public.cities (
+CREATE TABLE IF NOT EXISTS public.cities (
 	id uuid NOT NULL,
     	name varchar(255) NOT NULL,
 	created_at timestamptz NOT NULL,
@@ -185,7 +185,7 @@ CREATE TABLE public.cities (
     	CONSTRAINT cities_country_id_fkey FOREIGN KEY (country_id) REFERENCES countries(id) ON UPDATE CASCADE ON DELETE CASCADE,
 );
 
-CREATE TABLE public.faqstatistics (
+CREATE TABLE IF NOT EXISTS public.faqstatistics (
 	id uuid NOT NULL,
    	views integer NOT NULL,
     	positive integer NOT NULL,
@@ -196,13 +196,13 @@ CREATE TABLE public.faqstatistics (
 	deleted_at timestamptz NULL,
 );
 
-CREATE TABLE public.tymeoftrainings (
+CREATE TABLE IF NOT EXISTS public.tymeoftrainings (
 	id uuid NOT NULL,
     	time integer NOT NULL,
     	date timestamptz NULL,
 );
 
-CREATE TABLE public.patientexercises (
+CREATE TABLE IF NOT EXISTS public.patientexercises (
 	id uuid NOT NULL,
     	totalTime integer NOT NULL,
 	comment varchar(255) NOT NULL,
@@ -222,7 +222,7 @@ CREATE TABLE public.patientexercises (
     	CONSTRAINT patientexercises_settings_id_fkey FOREIGN KEY (settings_id) REFERENCES settings(id) ON UPDATE CASCADE ON DELETE CASCADE,
 );
 
-CREATE TABLE public.cards (
+CREATE TABLE IF NOT EXISTS public.cards (
 	id uuid NOT NULL,
     	last4 integer NOT NULL,
     	exp_year integer NOT NULL,
@@ -236,7 +236,7 @@ CREATE TABLE public.cards (
     	CONSTRAINT cards_country_id_fkey FOREIGN KEY (country_id) REFERENCES countries(id) ON UPDATE CASCADE ON DELETE CASCADE,
 );
 
-CREATE TABLE public.achievements (
+CREATE TABLE IF NOT EXISTS public.achievements (
 	id uuid NOT NULL,
     	game_names text[] NOT NULL,
     	total_amount_of_time_in_game integer NOT NULL,
@@ -251,13 +251,13 @@ CREATE TABLE public.achievements (
     	CONSTRAINT achievements_patient_id_fkey FOREIGN KEY (patient_id) REFERENCES patients(id) ON UPDATE CASCADE ON DELETE CASCADE,
 );
 
-CREATE TABLE public.patientsettings (
+CREATE TABLE IF NOT EXISTS public.patientsettings (
 	id uuid NOT NULL,
     	patient_position integer NOT NULL,
     	path integer NOT NULL,
 );
 
-CREATE TABLE public.patientquestionfeelings (
+CREATE TABLE IF NOT EXISTS public.patientquestionfeelings (
 	id uuid NOT NULL,
     	question_before varchar(255) NOT NULL,
     	question_after varchar(255) NOT NULL,
@@ -271,7 +271,7 @@ CREATE TABLE public.patientquestionfeelings (
     	CONSTRAINT patientquestionfeelings_game_id_fkey FOREIGN KEY (game_id) REFERENCES games(id) ON UPDATE CASCADE ON DELETE CASCADE,
 );
 
-CREATE TABLE public.faqconfigs (
+CREATE TABLE IF NOT EXISTS public.faqconfigs (
 	id uuid NOT NULL,
     	lang varchar(255) NOT NULL,
     	role varchar(255) NOT NULL,
@@ -281,7 +281,7 @@ CREATE TABLE public.faqconfigs (
 	deleted_at timestamptz NULL,
 );
 
-CREATE TABLE public.hospitals (
+CREATE TABLE IF NOT EXISTS public.hospitals (
 	id uuid NOT NULL,
     	name integer NOT NULL,
 	city varchar(255) NOT NULL,
@@ -304,7 +304,7 @@ CREATE TABLE public.hospitals (
 	CONSTRAINT hospitals_card_id_fkey FOREIGN KEY (card_id) REFERENCES cards(id) ON UPDATE CASCADE ON DELETE CASCADE,
 );
 
-CREATE TABLE public.specialists (
+CREATE TABLE IF NOT EXISTS public.specialists (
 	id uuid NOT NULL,
     	first_name varchar(255) NOT NULL,
       last_name varchar(255) NOT NULL,
@@ -331,7 +331,7 @@ CREATE TABLE public.specialists (
 	CONSTRAINT specialists_user_id_fkey FOREIGN KEY (user_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE,
 );
 
-CREATE TABLE public.patienttestresults (
+CREATE TABLE IF NOT EXISTS public.patienttestresults (
 	id uuid NOT NULL,
   reference_results text[] NOT NULL,
   patient_results text[] NOT NULL,
@@ -349,7 +349,7 @@ CREATE TABLE public.patienttestresults (
 	CONSTRAINT patienttestresults_test_id_fkey FOREIGN KEY (test_id) REFERENCES tests(id) ON UPDATE CASCADE ON DELETE CASCADE,
 );
 
-CREATE TABLE public.emails (
+CREATE TABLE IF NOT EXISTS public.emails (
 	id uuid NOT NULL,
   ignore_unsubscribe bool NOT NULL DEFAULT true,
   	lang varchar(255) NOT NULL,
@@ -366,7 +366,7 @@ CREATE TABLE public.emails (
     	CONSTRAINT emails_service_name_id_fkey FOREIGN KEY (service_name_id) REFERENCES service_names(id) ON UPDATE CASCADE ON DELETE CASCADE,
 );
 
-CREATE TABLE public.faqitems (
+CREATE TABLE IF NOT EXISTS public.faqitems (
 	id uuid NOT NULL,
     roles text[] NOT NULL,
     lang varchar(255) NOT NULL,
@@ -383,7 +383,7 @@ CREATE TABLE public.faqitems (
       CONSTRAINT faqitems_faq_statistic_id_fkey FOREIGN KEY (faq_statistic_id) REFERENCES faq_statistics(id) ON UPDATE CASCADE ON DELETE CASCADE,
 );
 
-CREATE TABLE public.patients (
+CREATE TABLE IF NOT EXISTS public.patients (
 	id uuid NOT NULL,
     specialists text[] NOT NULL,
     first_login bool NOT NULL DEFAULT true,
@@ -417,7 +417,7 @@ CREATE TABLE public.patients (
       CONSTRAINT patients_achievement_id_fkey FOREIGN KEY (achievement_id) REFERENCES achievements(id) ON UPDATE CASCADE ON DELETE CASCADE,
 );
 
-CREATE TABLE public.settings (
+CREATE TABLE IF NOT EXISTS public.settings (
 	id uuid NOT NULL,
   work_type integer NOT NULL,
   on_r_hand bool NOT NULL DEFAULT true,
@@ -452,7 +452,7 @@ CREATE TABLE public.settings (
 	CONSTRAINT settings_pkey PRIMARY KEY (id),
 );
 
-CREATE TABLE public.patientlidachievements (
+CREATE TABLE IF NOT EXISTS public.patientlidachievements (
 	id uuid NOT NULL,
   training_names text[] NOT NULL,
   time_of_trainings text[] NOT NULL,
@@ -464,7 +464,7 @@ CREATE TABLE public.patientlidachievements (
 	CONSTRAINT patientlidachievements_pkey PRIMARY KEY (id),
 );
 
-CREATE TABLE public.hospitalbankaccounts (
+CREATE TABLE IF NOT EXISTS public.hospitalbankaccounts (
 	id uuid NOT NULL,
   	translations text[] NOT NULL,
 	created_at timestamptz NOT NULL,
@@ -473,7 +473,7 @@ CREATE TABLE public.hospitalbankaccounts (
   CONSTRAINT hospitalbankaccounts_pkey PRIMARY KEY (id),
 );
 
-CREATE TABLE public.exercisetranslations (
+CREATE TABLE IF NOT EXISTS public.exercisetranslations (
 	id uuid NOT NULL,
   company_name varchar(255) NOT NULL,
 	created_at timestamptz NOT NULL,
@@ -482,7 +482,7 @@ CREATE TABLE public.exercisetranslations (
   CONSTRAINT exercisetranslations_pkey PRIMARY KEY (id),
 );
 
-CREATE TABLE public.games (
+CREATE TABLE IF NOT EXISTS public.games (
 	id uuid NOT NULL,
     	name integer NOT NULL,
 	comment varchar(255) NOT NULL,
@@ -498,7 +498,7 @@ CREATE TABLE public.games (
 	CONSTRAINT games_settings_patient_id_fkey FOREIGN KEY (patient_id) REFERENCES patients(id) ON UPDATE CASCADE ON DELETE CASCADE,
 );
 
-CREATE TABLE public.specialiststatuses (
+CREATE TABLE IF NOT EXISTS public.specialiststatuses (
 	id uuid NOT NULL,
   lang varchar(255) NOT NULL,
   status varchar(255) NOT NULL,
@@ -508,7 +508,7 @@ CREATE TABLE public.specialiststatuses (
   CONSTRAINT specialiststatuses_pkey PRIMARY KEY (id),
 );
 
-CREATE TABLE public.icfqualifiers (
+CREATE TABLE IF NOT EXISTS public.icfqualifiers (
 	id uuid NOT NULL,
   name varchar(255) NOT NULL,
   description varchar(255) NOT NULL,
@@ -519,7 +519,7 @@ CREATE TABLE public.icfqualifiers (
   CONSTRAINT icfqualifiers_pkey PRIMARY KEY (id),
 );
 
-CREATE TABLE public.repeatsoftrainings (
+CREATE TABLE IF NOT EXISTS public.repeatsoftrainings (
 	id uuid NOT NULL,
   repeats integer NOT NULL,
   _date timestamptz NOT NULL,
@@ -529,7 +529,7 @@ CREATE TABLE public.repeatsoftrainings (
   CONSTRAINT repeatsoftrainings_pkey PRIMARY KEY (id),
 );
 
-CREATE TABLE public.icflinks (
+CREATE TABLE IF NOT EXISTS public.icflinks (
 	id uuid NOT NULL,
   name varchar(255) NOT NULL,
   code varchar(255) NOT NULL,
@@ -541,7 +541,7 @@ CREATE TABLE public.icflinks (
   CONSTRAINT icflinks_pkey PRIMARY KEY (id),
 );
 
-CREATE TABLE public.phoneplacements (
+CREATE TABLE IF NOT EXISTS public.phoneplacements (
 	id uuid NOT NULL,
   name varchar(255) NOT NULL,
   url varchar(255) NOT NULL,
@@ -551,7 +551,7 @@ CREATE TABLE public.phoneplacements (
   CONSTRAINT phoneplacements_pkey PRIMARY KEY (id),
 );
 
-CREATE TABLE public.specialistspecializations (
+CREATE TABLE IF NOT EXISTS public.specialistspecializations (
 	id uuid NOT NULL,
   lang varchar(255) NOT NULL,
   specialization_id uuid NULL,
@@ -562,7 +562,7 @@ CREATE TABLE public.specialistspecializations (
   CONSTRAINT specialistspecializations_specialization_id_fkey FOREIGN KEY (specialization_id) REFERENCES specializations(id) ON UPDATE CASCADE ON DELETE CASCADE,
 );
 
-CREATE TABLE public.patientstatuses (
+CREATE TABLE IF NOT EXISTS public.patientstatuses (
 	id uuid NOT NULL,
   lang varchar(255) NOT NULL,
   status varchar(255) NOT NULL,
@@ -572,7 +572,7 @@ CREATE TABLE public.patientstatuses (
 	CONSTRAINT patientstatuses_pkey PRIMARY KEY (id),
 );
 
-CREATE TABLE public.countries (
+CREATE TABLE IF NOT EXISTS public.countries (
 	id uuid NOT NULL,
   name varchar(255) NOT NULL,
   code varchar(255) NOT NULL,
@@ -582,7 +582,7 @@ CREATE TABLE public.countries (
 	CONSTRAINT countries_pkey PRIMARY KEY (id),
 );
 
-CREATE TABLE public.hospitalstatuses (
+CREATE TABLE IF NOT EXISTS public.hospitalstatuses (
 	id uuid NOT NULL,
   name varchar(255) NOT NULL,
   lang varchar(255) NOT NULL,
