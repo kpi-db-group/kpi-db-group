@@ -1,0 +1,93 @@
+type Patient {
+    _id: String!
+    firstName: String
+    lastName: String
+    secondaryName: String
+    dateOfBirth: Date
+    gender: String
+    dateOfRegistration: Date
+    dateOfWritingOut: Date
+    medicalHistory: String
+    goalRehabilitation: String
+    hospital: String
+    user: String
+    patientStatus: String
+    height: Int
+    weight: Float
+    phoneNumber: String
+    city: String
+    address: String
+    patientDiagnosis: String
+    specialists: [String],
+    email: String,
+    firstLogin: Boolean,
+    recommendation: String,
+    nickname: String,
+    firstTimeAddGame: Boolean,
+    achievement: String,
+}
+
+type GetPatient {
+    _id: String!
+    firstName: String
+    lastName: String
+    secondaryName: String
+    dateOfBirth: Date
+    gender: String
+    dateOfRegistration: Date
+    dateOfWritingOut: Date
+    medicalHistory: String
+    goalRehabilitation: String
+    hospital: Hospital
+    user: User
+    patientStatus: String
+    height: Int
+    weight: Float
+    phoneNumber: String
+    city: String
+    address: String
+    patientDiagnosis: PatientDiagnosis
+    specialists: [GetSpecialist]
+    firstLogin: Boolean,
+    email: String,
+    index: Int,
+    elementsPerChunk: Int,
+    field: String,
+    order: Int,
+    populatedEntity: String,
+    populatedField: String,
+    active: Boolean,
+    nickname: String,
+    firstTimeAddGame: Boolean,
+    achievement: GetPatientLidAchievement,
+}
+type PagablePatients {
+    data:  [GetPatient!]!,
+    count: Int
+}
+type Query {
+    getAllPatients: [GetPatient!]!
+    getPatientById(_id: String!): GetPatient!
+    getPatientsByHospitalId(_idHospital: String!, index: Int, elementsPerChunk: Int, field: String, order: Int, populatedEntity: String, populatedField: String, achievement: String): PagablePatients
+    getPatientsBySpecialistId(specialistId: String!, index: Int, elementsPerChunk: Int, field: String, order: Int, populatedEntity: String, populatedField: String, active: Boolean, achievement: String): PagablePatients
+}
+
+type Mutation {
+    createPatient(
+        firstName: String!, lastName: String!, secondaryName: String, dateOfBirth: Date, gender: String!,
+        dateOfRegistration: Date, dateOfWritingOut: Date, hospital: String!, user: String, patientStatus: String, height: Int,
+        weight: Float, phoneNumber: String, city: String, address: String, patientDiagnosis: String, specialists: [String],
+        email: String, firstLogin: Boolean, firstTimeAddGame: Boolean, lang: String
+    ): Patient!
+    updatePatient(
+        _id: String!, firstName: String, lastName: String, secondaryName: String, dateOfBirth: Date, gender: String,
+        dateOfRegistration: Date, dateOfWritingOut: Date, hospital: String, user: String, patientStatus: String, height: Int,
+        weight: Float, phoneNumber: String, city: String, address: String, patientDiagnosis: String, specialists: [String], medicalHistory: String, 
+        goalRehabilitation: String, email: String, firstLogin: Boolean, recommendation: String, nickname: String, , firstTimeAddGame: Boolean,
+        achievement: String
+    ): Patient!
+    removeSpecialistFromPatients(specialistId: String!, hospitalId: String!): Boolean
+    removeSpecialistFromPatient(specialistId: String!, patientId: String!): Boolean
+    addSpecialistAndPatientConnections(specialistId: String!, patientId: String!): Boolean
+    removeGameFromPatients(gameId: String!): Boolean
+}

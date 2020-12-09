@@ -1,0 +1,41 @@
+type User {
+    _id: String!
+    password: String!,
+    email: String!,
+    roles: [Role!]!
+    identifier: String
+    lang: String
+    unsubscribeEmail: Boolean!
+    enabled: Boolean!,
+    dateOfDeactivation: Date,
+    lastLoginDate: Date,
+    createdAt: Date,
+    updatedAt: Date
+}
+
+enum Role {
+    SPECIALIST,
+    PATIENT,
+    ADMIN,
+    CLINIC,
+    ALL,
+}
+
+type Query {
+    getAllUsers: [User!]!
+    getUserById(_id: String!): User!
+    getUnsubscribeStatusById(_id: String!): Boolean!
+    getUserByEmail(email: String!): User!
+    getUsersByRolesAndLang(roles: [Role!]!, lang: String!): [User!]!
+}
+
+type Mutation {
+    createUser(password: String!, email: String!, roles: [Role!]!): User!
+    updateUser(_id: String!, password: String!, email: String!, roles: [Role!]!): User!
+    changeUserPassword(_id: String!, oldPassword: String!, newPassword: String!): User!
+    deleteUser(_id: String!): User!
+    disableUser(_id: String!): User!
+    activateUser(_id: String!): User!
+    updateUserLangById(_id: String!, lang: String!): User!
+    unsubscribeFromEmail(_id: String!, value: Boolean): User!
+}
