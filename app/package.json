@@ -2,9 +2,7 @@
   "name": "application",
   "version": "0.0.1",
   "description": "",
-  "author": "",
-  "license": "MIT",
-  "scripts": {
+    "scripts": {
     "start": "ts-node -r tsconfig-paths/register src/main.ts",
     "start:dev": "nodemon",
     "install-start": "npm install && npm start",
