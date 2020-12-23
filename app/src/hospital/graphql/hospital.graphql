@@ -1,0 +1,40 @@
+type Hospital {
+    _id: String!
+    name: String
+    city: String
+    mainEmail: String
+    additionalEmail: String
+    hospitalStatus: String
+    country: String
+    user: String
+}
+
+type GetHospital {
+    _id: String!
+    name: String!
+    city: String
+    mainEmail: String!
+    additionalEmail: String
+    hospitalStatus: String
+    country: Country
+    user: User
+}
+
+type inviteUserResponce {
+    status: String
+}
+
+type Query {
+    getAllHospitals: [GetHospital!]!
+    getHospitalById(_id: String!): GetHospital!
+    inviteUser(email: String!, hospitalId: String, specialistId: String): inviteUserResponce!
+    getPaymentInformation(_id: String!): paymentInformation!
+}
+
+type Mutation {
+    createHospital(name: String!, city: String!, mainEmail: String!, additionalEmail: String!, hospitalStatus: String!,
+        country: String!, lang: String): Hospital!
+    updateHospital(_id: String!, name: String, city: String, mainEmail: String, additionalEmail: String,
+        hospitalStatus: String, country: String, user: String, sendDownloadLink: Boolean): Hospital!
+    deleteHospital(_id: String!): Hospital!
+}

@@ -1,0 +1,94 @@
+type Specialist {
+    _id: String!
+    firstName: String!
+    lastName: String!
+    secondaryName: String
+    dateOfBirth: Date
+    dateOfHiring: Date!
+    dateOfFiring: Date
+    experience: String
+    email: String
+    about: String
+    gender: String
+    address: String
+    phoneNumber: String
+    city: String
+    specialistSpecialization: String
+    specialistStatus: String
+    patients: [String]
+    hospital: String!
+    user: String!
+    firstLogin: Boolean
+}
+
+type GetSpecialist {
+    _id: String!
+    firstName: String!
+    lastName: String!
+    secondaryName: String
+    dateOfBirth: Date
+    dateOfHiring: Date
+    dateOfFiring: Date
+    experience: String
+    email: String
+    about: String
+    gender: String
+    address: String
+    phoneNumber: String
+    city: String
+    specialistSpecialization: SpecialistSpecialization
+    specialistStatus: String
+    patients: [GetPatient]
+    hospital: Hospital!
+    user: User,
+    index: Int,
+    elementsPerChunk: Int,
+    field: String,
+    order: Int,
+    populatedField: String,
+    firstLogin: Boolean,
+}
+
+type PagableSpecialists {
+    data: [GetSpecialist!]!,
+    count: Int
+}
+
+type Query {
+    getAllSpecialists: [GetSpecialist!]!
+    getSpecialistById(_id: String!): GetSpecialist!
+    getSpecialistsByHospital(_idHospital: String!, index: Int, elementsPerChunk: Int, field: String, order: Int, populatedField: String): PagableSpecialists
+    getAllSpecialistsByStatus(status: String!): [GetSpecialist!]!
+}
+
+type Mutation {
+    createSpecialist(
+        firstName: String!,
+        lastName: String!,
+        email: String!,
+        hospital: String!,
+        specialistSpecialization: String!,
+        dateOfHiring: Date!,
+        dateOfBirth: Date,
+        dateOfFiring: Date,
+        experience: String,
+        about: String,
+        secondaryName: String,
+        gender: String,
+        address: String,
+        phoneNumber: String,
+        city: String,
+        specialistStatus: String,
+        patients: [String],
+        user: String,
+        lang: String,
+        firstLogin: Boolean,
+    ): Specialist!
+
+    updateSpecialist(_id: String!, firstName: String, lastName: String, secondaryName: String, dateOfBirth: Date,
+        dateOfHiring: Date, dateOfFiring: Date, experience: String, email: String, about: String, gender: String, address: String,
+        phoneNumber: String, city: String, specialistSpecialization: String, specialistStatus: String, patients: [String],
+        hospital: String, user: String, sendDownloadLink: Boolean, firstLogin: Boolean): Specialist!
+    deleteSpecialist(_id: String!): Specialist!
+    updateNullStatusesOnAllSpecialists: Boolean
+}
