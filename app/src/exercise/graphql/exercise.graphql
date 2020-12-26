@@ -1,0 +1,109 @@
+type Exercise {
+    _id: String!,
+    name: String,
+    description: String,
+    link: String,
+    pictureLink: String,
+    gifLink: String,
+    lang: String,
+    forGames: [String],
+    classifierId: String,
+    exerciseType: String,
+    commandRight: String,
+    commandLeft: String,
+    bodyPart: String,
+    displayForPatient: Boolean,
+    displayForSpecialist: Boolean,
+    specialist: String,
+    phonePlacement: String
+}
+
+type SpecialExercise {
+    _id: String!,
+    name: String,
+    description: String,
+    link: String,
+    pictureLink: String,
+    gifLink: String,
+    lang: String,
+    forGames: [String],
+    classifierId: String,
+    exerciseType: String,
+    commandRight: String,
+    commandLeft: String,
+    bodyPart: BodyPart,
+    displayForPatient: Boolean,
+    displayForSpecialist: Boolean,
+    phonePlacement: PhonePlacement
+}
+
+type GetExercise {
+    _id: String!,
+    name: String,
+    description: String,
+    link: String,
+    pictureLink: String,
+    gifLink: String,
+    lang: String,
+    forGames: [String]
+    classifierId: String,
+    exerciseType: String,
+    commandRight: String,
+    commandLeft: String,
+    bodyPart: GetBodyPart,
+    displayForPatient: Boolean,
+    displayForSpecialist: Boolean,
+    specialist: Specialist,
+    phonePlacement: PhonePlacement
+    # translation: ExerciseTranslations
+}
+
+type Query {
+    getAllExercisesByLang(lang: String!): [GetExercise!]!
+    getExercisesByLang(lang: String!): [GetExercise!]!
+    getExerciseById(_id: String!): GetExercise!
+    getExerciseByIdAndLang(_id: String!, lang: String!): GetExercise!
+    getExercisesBySpecialistId(_id: String!): [GetExercise!]!
+    find(lang: String!, _ids: [String!]!): [GetExercise!]!
+}
+
+type Mutation {
+    createExercise(
+        name: String!,
+        description: String,
+        link: String!,
+        pictureLink: String,
+        gifLink: String,
+        lang: String!,
+        forGames: [String!],
+        classifierId: String,
+        exerciseType: String,
+        commandRight: String,
+        commandLeft: String,
+        bodyPart: String,
+        displayForPatient: Boolean,
+        displayForSpecialist: Boolean,
+        specialist: String,
+        phonePlacement: String
+        ): Exercise!
+    updateExercise(
+        _id: String!,
+        name: String,
+        description: String,
+        link: String,
+        pictureLink: String,
+        gifLink: String,
+        lang: String,
+        forGames: [String],
+        classifierId: String,
+        exerciseType: String,
+        commandRight: String,
+        commandLeft: String,
+        bodyPart: String,
+        displayForPatient: Boolean,
+        displayForSpecialist: Boolean,
+        specialist: String,
+        phonePlacement: String
+        ): Exercise!
+    deleteExercise(_id: String!): Exercise!
+}
